@@ -64,7 +64,7 @@ package
 	
 	[SWF(backgroundColor="#000000", frameRate="30", quality="LOW", width="800", height="600")]
 	 
-	public class Room extends Sprite
+	public class VirtualRoom extends Sprite
 	{
 		static private var toRADIANS:Number = Math.PI / 180;
 		
@@ -122,7 +122,7 @@ package
 		private var collisionMatrix:Matrix = new Matrix();
 		private var collisionDot:Number;
 		private var collisionDistance:Number = 30;
-		
+		private var stageObj:Object;
 		//misc variables
 		private var debugPrecise:Boolean = false;
 		private var preciseMaterials:Array = [];
@@ -135,8 +135,9 @@ package
 		/**
 		 * Constructor
 		 */
-		public function Room()
+		public function VirtualRoom(obj:Stage)
 		{
+			stageObj = obj;
 			init();
 		}
 		
@@ -180,7 +181,7 @@ package
 			addChild(view);
 			
 			//add signature
-            stage.quality = StageQuality.HIGH; 
+			stageObj.quality = StageQuality.HIGH; 
             
            // addChild(new AwayStats(view));
 		}
@@ -357,20 +358,20 @@ package
 		private function initListeners():void
 		{
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
-			stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			stageObj.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 			
 			view.addEventListener(MouseEvent.CLICK, onTV);
-			stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
-			stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
-			stage.addEventListener(Event.RESIZE, onResize);
+			stageObj.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			stageObj.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			stageObj.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+			stageObj.addEventListener(Event.RESIZE, onResize);
  			onResize();
 		}
 		private function onTV(event:Event):void
 		{
 			var viewObj:View3D = event.currentTarget as View3D;
 			if(viewObj.hitManager.elementVO.material == tvMaterial){
-				
+				dispatchEvent(new Event('tvPressed'));
 			}
 		}
 		/**
@@ -417,8 +418,8 @@ package
 			
 			//update rotation values
 			if (move) {
-				panangle = 0.3*(stage.mouseX - lastMouseX) + lastPanAngle;
-				tiltangle = -0.3*(stage.mouseY - lastMouseY) + lastTiltAngle;
+				panangle = 0.3*(stageObj.mouseX - lastMouseX) + lastPanAngle;
+				tiltangle = -0.3*(stageObj.mouseY - lastMouseY) + lastTiltAngle;
 				
             	if (tiltangle > 70)
             		tiltangle = 70;
@@ -440,9 +441,9 @@ package
 			
 			//check movement
 			if (!move && !cameraRightSpeed && !cameraForwardSpeed)
-				stage.quality = StageQuality.HIGH;
+				stageObj.quality = StageQuality.HIGH;
 			else
-				stage.quality = StageQuality.LOW;
+				stageObj.quality = StageQuality.LOW;
 		}
 		
 		/**
@@ -509,10 +510,10 @@ package
         {
             lastPanAngle = panangle;
             lastTiltAngle = tiltangle;
-            lastMouseX = stage.mouseX;
-            lastMouseY = stage.mouseY;
+            lastMouseX = stageObj.mouseX;
+            lastMouseY = stageObj.mouseY;
         	move = true;
-        	stage.addEventListener(Event.MOUSE_LEAVE, onStageMouseLeave);
+			stageObj.addEventListener(Event.MOUSE_LEAVE, onStageMouseLeave);
         }
 		
 		/**
@@ -521,7 +522,7 @@ package
         private function onMouseUp(event:MouseEvent):void
         {
         	move = false;
-        	stage.removeEventListener(Event.MOUSE_LEAVE, onStageMouseLeave);     
+			stageObj.removeEventListener(Event.MOUSE_LEAVE, onStageMouseLeave);     
         }
         
         /**
@@ -609,7 +610,7 @@ package
         private function onStageMouseLeave(event:Event):void
         {
         	move = false;
-        	stage.removeEventListener(Event.MOUSE_LEAVE, onStageMouseLeave);     
+			stageObj.removeEventListener(Event.MOUSE_LEAVE, onStageMouseLeave);     
         }
 		
 		/**
@@ -617,8 +618,8 @@ package
 		 */
 		private function onResize(event:Event = null):void
 		{
-			view.x = stage.stageWidth / 2;
-            view.y = stage.stageHeight / 2;
+			view.x = stageObj.stageWidth / 2;
+            view.y = stageObj.stageHeight / 2;
 		}
 	}
 }
