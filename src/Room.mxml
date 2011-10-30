@@ -14,17 +14,21 @@
 				stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE
 				var room:VirtualRoom = new VirtualRoom(this.systemManager.stage);
 				room.addEventListener('tvPressed',onTvPressed);
-				view.addChild(room);
+				//view.addChild(room);
+				var model:Model= new Model(this.systemManager.stage);
+				view.addChild(model);
 			}
 			private function onTvPressed(ev:Event):void{
-				currentState = 'demo'
+				currentState = 'model'
 			}
 		]]>
 	</fx:Script> 
 	<s:states>
 		<s:State name="reception"/>
+		<s:State name="model"/>
 		<s:State name="demo"/>
 	</s:states>
 	<s:SpriteVisualElement id="view" includeIn="reception"/>
+	<s:SpriteVisualElement id="modelView" includeIn="model"/>
 	<s:Image source="assets/room/TV.jpg" includeIn="demo"/>
 </s:WindowedApplication>
