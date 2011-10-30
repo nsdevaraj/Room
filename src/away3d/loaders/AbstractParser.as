@@ -1,8 +1,8 @@
 package away3d.loaders
 {
 	
-	import away3d.arcane;
 	import away3d.animators.data.*;
+	import away3d.arcane;
 	import away3d.containers.*;
 	import away3d.core.base.*;
 	import away3d.core.utils.*;
@@ -222,16 +222,14 @@ package away3d.loaders
 					
 				}
 			}
-		}
-		
+		} 
         protected function buildMesh(_meshData:MeshData, parent:ObjectContainer3D):Mesh
 		{
 			Debug.trace(" + Build Mesh : "+_meshData.name);
 			
 			var mesh:Mesh = new Mesh({name:_meshData.name});
 			mesh.transform = _meshData.transform;
-			mesh.bothsides = _meshData.geometry.bothsides;
-			
+			mesh.bothsides = _meshData.geometry.bothsides; 
 			var _geometryData:GeometryData = _meshData.geometry;
 			var geometry:Geometry = _geometryData.geometry;
 			

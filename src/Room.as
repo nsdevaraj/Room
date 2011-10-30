@@ -97,10 +97,10 @@ package
 		private var downFlag:Boolean = false;
 		private var leftFlag:Boolean = false;
 		private var rightFlag:Boolean = false;
-		private var cameraForwardSpeed:Number = 0;
+		private var cameraForwardSpeed:Number = 2;
 		private var cameraForwardAcc:Number = 2;
 		private var cameraForwardDrag:Number = 0.3;
-		private var cameraRightSpeed:Number = 0;
+		private var cameraRightSpeed:Number = 2;
 		private var cameraRightAcc:Number = 2;
 		private var cameraRightDrag:Number = 0.3;
 		private var forwardVector:Vector3D = new Vector3D();
@@ -180,8 +180,7 @@ package
 			addChild(view);
 			
 			//add signature
-            stage.quality = StageQuality.HIGH;
-            stage.quality = StageQuality.LOW;
+            stage.quality = StageQuality.HIGH; 
             
            // addChild(new AwayStats(view));
 		}
@@ -220,8 +219,11 @@ package
 		private function initModel():void
 		{
 			model = loader.handle as ObjectContainer3D;
-			model.rotationX = 90;
-			model.y = -80;
+			model.rotationX = 90; 
+			model.rotationY =270; 
+ 			model.y = -80;
+			model.z = 60;  
+			model.x = 50;
 		}
 		
 		/**
@@ -356,13 +358,21 @@ package
 		{
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			
+			view.addEventListener(MouseEvent.CLICK, onTV);
 			stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 			stage.addEventListener(Event.RESIZE, onResize);
-			onResize();
+ 			onResize();
 		}
-		
+		private function onTV(event:Event):void
+		{
+			var viewObj:View3D = event.currentTarget as View3D;
+			if(viewObj.hitManager.elementVO.material == tvMaterial){
+				
+			}
+		}
 		/**
 		 * Navigation and render loop
 		 */
